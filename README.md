@@ -2,6 +2,8 @@
 
 A golang package for working with ECDSA public key signatures.
 
+[Documentation](https://godoc.org/github.com/planningcenter/signature)
+
 ## Examples
 
 ```go
