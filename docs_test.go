@@ -4,7 +4,7 @@ import (
 	"encoding/base64"
 	"fmt"
 
-	signature "github.com/planningcenter/signature"
+	"github.com/planningcenter/signature"
 )
 
 var (
@@ -13,24 +13,24 @@ var (
 )
 
 func Example_signAndVerify() {
-	private, err := signature.UnmarshalPrivateKeyPem(privateKeyPem, signature.KeyFormatASN1)
+	private, err := signature.UnmarshalPrivateKeyPem(privateKeyPem, signature.KeyFormatPKCS8)
 	if err != nil {
 		panic(err)
 	}
 
 	message := []byte("This is a secure message")
 
-	sig, err := signature.CreateSignature(private, message)
+	sig, err := signature.CreateECSignature(private, message)
 	if err != nil {
 		panic(err)
 	}
 
-	public, err := signature.UnmarshalPublicKeyPem(publicKeyPem, signature.KeyFormatASN1)
+	public, err := signature.UnmarshalPublicKeyPem(publicKeyPem, signature.KeyFormatPKCS8)
 	if err != nil {
 		panic(err)
 	}
 
-	err = signature.VerifySignature(public, message, sig)
+	err = signature.VerifyECSignature(public, message, sig)
 	if err != nil {
 		panic(err)
 	}
@@ -40,18 +40,18 @@ func Example_signAndVerify() {
 	// Output: Valid
 }
 
-func ExampleGenerateKey_pem() {
-	key, err := signature.GenerateKey(signature.ECurve256)
+func ExampleGeneratePrivateECKey_pem() {
+	key, err := signature.GeneratePrivateECKey(signature.CurveP256)
 	if err != nil {
 		panic(err)
 	}
 
-	private, err := signature.MarshalPrivateKeyPem(key.PrivateKey, signature.KeyFormatASN1)
+	private, err := signature.MarshalPrivateKeyPem(key, signature.KeyFormatPKCS8)
 	if err != nil {
 		panic(err)
 	}
 
-	public, err := signature.MarshalPublicKeyPem(key.PublicKey, signature.KeyFormatASN1)
+	public, err := signature.MarshalPublicKeyPem(&key.PublicKey, signature.KeyFormatPKCS8)
 	if err != nil {
 		panic(err)
 	}
@@ -60,13 +60,13 @@ func ExampleGenerateKey_pem() {
 	fmt.Println(string(public))
 }
 
-func ExampleCreateSignature() {
-	key, err := signature.GenerateKey(signature.ECurve256)
+func ExampleCreateECSignature() {
+	key, err := signature.GeneratePrivateECKey(signature.CurveP256)
 	if err != nil {
 		panic(err)
 	}
 
-	signature, err := signature.CreateSignature(key.PrivateKey, []byte("This is the message to sign"))
+	signature, err := signature.CreateECSignature(key, []byte("This is the message to sign"))
 	if err != nil {
 		panic(err)
 	}
