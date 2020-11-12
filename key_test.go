@@ -6,12 +6,16 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestEllipticKey(t *testing.T) {
-	t.Run("ECurve256", func(t *testing.T) {
-		t.Run("generating keys", func(t *testing.T) {
-			_, err := GenerateKey(ECurve256)
+func TestGeneratePrivateECKey(t *testing.T) {
+	t.Run("CurveP256", func(t *testing.T) {
+		_, err := GeneratePrivateECKey(CurveP256)
 
-			assert.NoError(t, err)
-		})
+		assert.NoError(t, err)
+	})
+
+	t.Run("CurveP521", func(t *testing.T) {
+		_, err := GeneratePrivateECKey(CurveP521)
+
+		assert.NoError(t, err)
 	})
 }

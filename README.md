@@ -1,8 +1,8 @@
 # Signature
 
-A golang package for working with ECDSA public key signatures.
+A Golang package for working with ECDSA public key signatures.
 
-[Documentation](https://godoc.org/github.com/planningcenter/signature)
+[Documentation](https://pkg.go.dev/github.com/planningcenter/signature)
 
 ## Examples
 
@@ -14,19 +14,19 @@ var (
   publicKeyPem  = []byte("-----BEGIN PUBLIC KEY-----\nMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAENuBexJ0sHye+VAFovW6XvR9C2Mp6\ntFx+WU49ieP1C0JgvA0Pz4eBbBRULXKpNbD7mH4TcDB7SI0T4ob7IcBdhA==\n-----END PUBLIC KEY-----")
 )
 
-private, err := signature.UnmarshalPrivateKeyPem(privateKeyPem, signature.KeyFormatASN1)
+private, err := signature.UnmarshalPrivateKeyPem(privateKeyPem, signature.KeyFormatPKCS8)
 if err != nil {
     panic(err)
 }
 
 message := []byte("This is a secure message")
 
-sig, err := signature.CreateSignature(private, message)
+sig, err := signature.CreateECSignature(private, message)
 if err != nil {
     panic(err)
 }
 
-public, err := signature.UnmarshalPublicKeyPem(publicKeyPem, signature.KeyFormatASN1)
+public, err := signature.UnmarshalPublicKeyPem(publicKeyPem, signature.KeyFormatPKCS8)
 if err != nil {
     panic(err)
 }

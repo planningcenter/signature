@@ -1,14 +1,18 @@
+GO_FILES := $(shell find . -type f -name '*.go')
+
 .PHONY: test
 test:
 	go test ./...
 
+coverage.out: ${GO_FILES}
+	go test -coverprofile=coverage.out ./...
+
+.PHONY: coverage
+coverage: coverage.out
+	go tool cover -html=coverage.out
+
 .PHONY: clean
 clean:
-	-rf cmd/generate/generate
-
-.PHONY: generate
-generate: cmd/generate/generate
-	cmd/generate/generate
-
-cmd/generate/generate:
-	cd cmd/generate && go build -o generate .
+	go mod tidy
+	go clean
+	-rm coverage.out
